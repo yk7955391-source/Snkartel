@@ -1,0 +1,45 @@
+<div id="crime-section" style="margin-top:20px;">
+    <h3>Suç İşle</h3>
+    <div id="crime-buttons"></div>
+</div>
+
+<script>
+// Örnek suç listesi
+const crimes = [
+    "Hırsızlık",
+    "Kapkaç",
+    "Dolandırıcılık",
+    "Uyuşturucu Satışı",
+    "Kaçakçılık",
+    "Yasadışı Kumar",
+    "Vandalizm",
+    "Hayvanlara Zarar",
+    "Trafik Suçu",
+    "Sahtecilik",
+    "Rüşvet"
+    // İstersen buraya diğer suçları da ekleyebilirsin
+];
+
+// Suç butonlarını oluştur
+function createCrimeButtons() {
+    const container = document.getElementById("crime-buttons");
+    crimes.forEach(crime => {
+        let btn = document.createElement("button");
+        btn.textContent = crime;
+        btn.style.margin = "5px";
+        btn.onclick = () => commitCrime(crime);
+        container.appendChild(btn);
+    });
+}
+
+// Suç işleme fonksiyonu
+function commitCrime(crimeName) {
+    if (!currentUser) { alert("Önce giriş yap!"); return; }
+    currentUser.sp += 350;
+    alert(`"${crimeName}" suçunu işledin ve 350 SP kazandın!\nToplam SP: ${currentUser.sp}`);
+    updateHome(); // Ana sayfayı güncelle
+}
+
+// Sayfa yüklenince suç butonlarını oluştur
+createCrimeButtons();
+</script>

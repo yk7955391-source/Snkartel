@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Son Kartel - Mağaza</title>
+<style>
+body {
+    background:#111;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+    padding:20px;
+}
+h1 { color:#ffd700; }
+.box {
+    border:1px solid #00eaff;
+    padding:15px;
+    margin-bottom:20px;
+    border-radius:10px;
+    width: 300px;
+    margin-left:auto;
+    margin-right:auto;
+}
+button {
+    padding:10px 20px;
+    background:#00eaff;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+}
+button:hover { background:#00c2cc; }
+</style>
+</head>
+<body>
+
+<h1>🛒 Son Kartel Mağaza</h1>
+<p>Altının: <span id="gold">5000</span></p>
+
+<div class="box">
+    <h3>50.000 Seviye Puanı</h3>
+    <p>Fiyat: 60 Altın</p>
+    <button onclick="buyItem('50.000 Seviye Puanı', 60)">Satın Al</button>
+</div>
+
+<div class="box">
+    <h3>150.000 Seviye Puanı</h3>
+    <p>Fiyat: 140 Altın</p>
+    <button onclick="buyItem('150.000 Seviye Puanı', 140)">Satın Al</button>
+</div>
+
+<div class="box">
+    <h3>500.000 Seviye Puanı</h3>
+    <p>Fiyat: 350 Altın</p>
+    <button onclick="buyItem('500.000 Seviye Puanı', 350)">Satın Al</button>
+</div>
+
+<div class="box">
+    <h3>1.000.000 Mermi</h3>
+    <p>Fiyat: 150 Altın</p>
+    <button onclick="buyItem('1.000.000 Mermi', 150)">Satın Al</button>
+</div>
+
+<div class="box">
+    <h3>2.500.000 Mermi</h3>
+    <p>Fiyat: 500 Altın</p>
+    <button onclick="buyItem('2.500.000 Mermi', 500)">Satın Al</button>
+</div>
+
+<div class="box">
+    <h3>5.000.000 Mermi</h3>
+    <p>Fiyat: 1000 Altın</p>
+    <button onclick="buyItem('5.000.000 Mermi', 1000)">Satın Al</button>
+</div>
+
+<script>
+let gold = 5000; // Oyuncunun altını
+
+function buyItem(item, price) {
+    if (gold >= price) {
+        gold -= price;
+        document.getElementById("gold").innerText = gold;
+        alert(item + " satın alındı!");
+    } else {
+        alert("Yeterli altın yok!");
+    }
+}
+</script>
+
+</body>
+</html>

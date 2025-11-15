@@ -1,0 +1,19 @@
+<div id="reset-section" style="margin-top:20px;">
+    <h3>Şifremi Unuttum</h3>
+    <input type="text" id="reset-username" placeholder="Kullanıcı Adı">
+    <input type="password" id="reset-new-password" placeholder="Yeni Şifre">
+    <button onclick="resetPassword()">Şifreyi Sıfırla</button>
+</div>
+
+<script>
+// Şifre sıfırlama fonksiyonu
+function resetPassword() {
+    let username = document.getElementById("reset-username").value;
+    let newPassword = document.getElementById("reset-new-password").value;
+
+    if (!username || !newPassword) {
+        alert("Boş bırakma!");
+        return;
+    }
+
+    let user =

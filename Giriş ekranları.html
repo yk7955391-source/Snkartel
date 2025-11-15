@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Son Kartel - Giriş</title>
+<style>
+body {
+    background:#111;
+    color:white;
+    font-family:Arial, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+}
+.container {
+    background:#1c1c1c;
+    padding:30px 40px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,255,255,0.3);
+    width:320px;
+    text-align:center;
+}
+h1 { color:#00eaff; margin-bottom:20px; }
+input {
+    width:90%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:8px;
+    border:none;
+    outline:none;
+}
+.button {
+    width:95%;
+    padding:10px;
+    margin-top:15px;
+    border:none;
+    border-radius:8px;
+    background:#00eaff;
+    color:#000;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
+}
+.button:hover { background:#00b8d4; }
+#msg {
+    color:#ff4d4d;
+    margin-top:10px;
+    min-height:20px;
+}
+#gameContent, #adminPanel { display:none; text-align:center; }
+#gameContent h2, #adminPanel h2 { color:#ffd700; }
+.userRow {
+    display:flex;
+    justify-content:space-between;
+    margin:5px 0;
+}
+.userButton {
+    background:#ff4d4d;
+    border:none;
+    border-radius:5px;
+    padding:2px 5px;
+    cursor:pointer;
+    color:white;
+}
+</style>
+</head>
+<body>
+
+<!-- Giriş/Kayıt Ekranı -->
+<div class="container" id="authScreen">
+    <h1>🎮 Son Kartel</h1>
+    <input type="text" id="usernameInput" placeholder="Kullanıcı Adı">
+    <input type="password" id="passwordInput" placeholder="Şifre">
+    <button class="button" onclick="login()">Giriş Yap</button>
+    <button class="button" onclick="register()">Kaydol</button>
+    <p id="msg"></p>
+</div>
+
+<!-- Oyun Ekranı -->
+<div class="container" id="gameContent">
+    <h2>Hoşgeldin, <span id="displayName"></span>!</h2>
+    <p>Altın: <span id="gold"></span></p>
+    <p>Mermi: <span id="ammo"></span></p>
+    <p>Saygı: <span id="respect"></span></p>
+    <p>Seviye Puanı: <span id="level"></span></p>
+    <p>Para: <span id="money"></span></p>
+
+    <div>
+        <h2>🎁 Hediye Kutusu</h2>
+        <button id="giftBtn" class="button" onclick="openGift()">Hediyeyi Aç</button>
+        <p id="giftMsg"></p>
+    </div>
+</div>
+
+<!-- Admin Paneli -->
+<div class="container" id="adminPanel">
+    <h2>Admin Paneli</h2>
+    <div id="userList"></div>
+</div>
+
+<script>
+// Admin bilgisi
+const adminUser = {username:"admin", password:"admin123"};
+
+// Kullanıcılar localStorage
+let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+// Oyuncu kaynakları
+let gold = 5000,
+    ammo = 2500000,
+    respect = 10000,
+    level = 0,
+    moneyAmount = 5_000_000_000_000; // 5 Trilyon
+
+let giftLimit = 1,
+    giftTaken = 0;
+
+// Para kısaltma fonksiyonu
+function formatMoney(amount){
+    if(amount>=1_000_000_000_000) return (amount/1_000_000_000_000)+"T";
+    if(amount>=1_000_000_000) return (amount/1_000_000_000)+"B";
+    if(amount>=1_000_000) return (amount/1_000_000)+"M";
+    if(amount>=1_000) return (amount/1_000)+"K";
+    return amount;
+}
+
+// Oyuncu ekranını güncelle
+function updateDisplay(){
+    document.getElementById("gold").innerText = formatMoney(gold);
+    document.getElementById("ammo").innerText = formatMoney(ammo);
+    document.getElementById("respect").innerText = formatMoney(respect);
+    document.getElementById("money").innerText = formatMoney(moneyAmount);
+    document.getElementById("level").innerText = level;
+}
+
+// Kullanıcı kaydı
+function register(){
+    const username = document.getElementById("usernameInput").value.trim();
+    const password = document.getElementById("passwordInput").value;
+
+    if(!username || !password){
+        document.getElementById("msg").innerText = "Kullanıcı adı ve şifre girin!";
+        return;
+    }
+
+    if(users.find(u => u.username === username)){
+        document.getElementById("msg").innerText = "Bu kullanıcı adı zaten mevcut!";
+        return;
+    }
+
+    users.push({username,password});
+    localStorage.setItem("users", JSON.stringify(users));
+    document.getElementById("msg").innerText = "Kayıt başarılı! Giriş yapabilirsiniz.";
+}
+
+// Giriş yap
+function login(){
+    const username = document.getElementById("usernameInput").value.trim();
+    const password = document.getElementById("passwordInput").value;
+
+    // Admin kontrolü
+    if(username===adminUser.username && password===adminUser.password){
+        document.getElementById("authScreen").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        showUsers();
+        return;
+    }
+
+    // Normal kullanıcı kontrolü
+    const user = users.find(u => u.username===username && u.password===password);
+    if(user){
+        document.getElementById("authScreen").style.display = "none";
+        document.getElementById("gameContent").style.display = "block";
+        document.getElementById("displayName").innerText = username;
+        updateDisplay();
+    } else {
+        document.getElementById("msg").innerText = "Kullanıcı adı veya şifre yanlış!";
+    }
+}
+
+// Admin panelinde kullanıcıları listele
+function showUsers(){
+    const listDiv = document.getElementById("userList");
+    listDiv.innerHTML = "";
+    users.forEach((u,index)=>{
+        const row = document.createElement("div");
+        row.className = "userRow";
+        row.innerHTML = `<span>${u.username}</span>
+                         <button class="userButton" onclick="deleteUser(${index})">Sil</button>`;
+        listDiv.appendChild(row);
+    });
+}
+
+// Kullanıcı silme
+function deleteUser(index){
+    if(confirm("Bu kullanıcıyı silmek istiyor musunuz?")){
+        users.splice(index,1);
+        localStorage.setItem("users", JSON.stringify(users));
+        showUsers();
+    }
+}
+
+// Hediye kutusu aç
+function openGift(){
+    if(giftTaken>=giftLimit){
+        document.getElementById("giftMsg").innerText="Hediye kutusunu zaten aldınız!";
+        return;
+    }
+    gold+=500000;
+    ammo+=2500000;
+    respect+=10000;
+    level+=5;
+    moneyAmount+=5_000_000_000_000;
+
+    giftTaken++;
+    updateDisplay();
+    document.getElementById("giftMsg").innerText="Hediye kutusu açıldı! 🎉";
+    document.getElementById("giftBtn").disabled=true;
+}
+</script>
+
+</body>
+</html>

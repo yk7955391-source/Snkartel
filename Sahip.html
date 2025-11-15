@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Admin Paneli</title>
+<style>
+body { font-family: Arial; background:#1a1a1a; color:#fff; }
+.container { max-width:600px; margin:20px auto; padding:20px; background:#222; border-radius:10px; }
+input { padding:5px; margin:5px; width:200px; border-radius:5px; border:none; }
+button { padding:5px 10px; margin:5px; border:none; border-radius:5px; cursor:pointer; }
+button.action { background:#4CAF50; color:#fff; }
+button.remove { background:#f44336; color:#fff; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Admin Paneli</h2>
+
+<input id="username" placeholder="Kullanıcı Adı"><br>
+
+<button class="action" onclick="giveGold()">Altın Ver</button>
+<button class="remove" onclick="removeGold()">Altın Al</button><br>
+
+<button class="action" onclick="giveAmmo()">Mermi Ver</button>
+<button class="remove" onclick="removeAmmo()">Mermi Al</button><br>
+
+<button class="action" onclick="giveSP()">SP Ver</button>
+<button class="remove" onclick="removeSP()">SP Al</button><br>
+
+<button class="action" onclick="giveRespect()">Saygı Ver</button>
+<button class="remove" onclick="removeRespect()">Saygı Al</button><br>
+
+<button class="remove" onclick="banPlayer()">Banla</button>
+<button class="action" onclick="unbanPlayer()">Ban Kaldır</button><br>
+
+<h3>Oyuncular:</h3>
+<pre id="playersList"></pre>
+</div>
+
+<script>
+// Oyuncular
+let players = [
+    { username:"oyuncu1", gold:500, ammo:100, sp:50, respect:20, banned:false },
+    { username:"oyuncu2", gold:1000, ammo:500, sp:200, respect:100, banned:false }
+];
+
+// Fonksiyonlar
+function findPlayer() {
+    let name = document.getElementById("username").value;
+    return players.find(p => p.username === name);
+}
+
+function updateList() {
+    document.getElementById("playersList").innerText = JSON.stringify(players, null, 2);
+}
+
+function giveGold(){ let p=findPlayer(); if(p){ p.gold+=100; updateList(); } }
+function removeGold(){ let p=findPlayer(); if(p){ p.gold-=100; if(p.gold<0)p.gold=0; updateList(); } }
+
+function giveAmmo(){ let p=findPlayer(); if(p){ p.ammo+=50; updateList(); } }
+function removeAmmo(){ let p=findPlayer(); if(p){ p.ammo-=50; if(p.ammo<0)p.ammo=0; updateList(); } }
+
+function giveSP(){ let p=findPlayer(); if(p){ p.sp+=10; updateList(); } }
+function removeSP(){ let p=findPlayer(); if(p){ p.sp-=10; if(p.sp<0)p.sp=0; updateList(); } }
+
+function giveRespect(){ let p=findPlayer(); if(p){ p.respect+=5; updateList(); } }
+function removeRespect(){ let p=findPlayer(); if(p){ p.respect-=5; if(p.respect<0)p.respect=0; updateList(); } }
+
+function banPlayer(){ let p=findPlayer(); if(p){ p.banned=true; updateList(); } }
+function unbanPlayer(){ let p=findPlayer(); if(p){ p.banned=false; updateList(); } }
+
+updateList();
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!-- ADMIN GİRİŞ -->
+<input type="text" id="loginUser" placeholder="Kullanıcı Adı">
+<input type="password" id="loginPass" placeholder="Şifre">
+<button onclick="login()">Giriş Yap</button>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none;">
+  <h2>Admin Paneli</h2>
+
+  <!-- Oyuncu Yönetimi -->
+  <h3>Oyuncu İşlemleri</h3>
+  <input type="text" id="targetUser" placeholder="Hedef oyuncu kullanıcı adı">
+  
+  <button onclick="addGold()">Altın Ekle</button>
+  <button onclick="removeGold()">Altın Çıkar</button>
+  
+  <button onclick="addAmmo()">Mermi Ekle</button>
+  <button onclick="removeAmmo()">Mermi Çıkar</button>
+  
+  <button onclick="addSP()">Saygı Puanı Ekle</button>
+  <button onclick="removeSP()">Saygı Puanı Çıkar</button>
+  
+  <button onclick="banUser()">Banla</button>
+  <button onclick="unbanUser()">Ban Kaldır</button>
+
+  <h3>Admin Listesi</h3>
+  <ul id="adminList"></ul>
+</div>
+
+<script>
+// Admin listesi
+let admins = JSON.parse(localStorage.getItem("admins") || "[]");
+
+// Başlangıçta elora admin
+const owner = { username: "elora", password: "admin123" };
+if (!admins.some(a => a.username === owner.username)) {
+    admins.push(owner);
+    localStorage.setItem("admins", JSON.stringify(admins));
+}
+
+// Örnek oyuncular verisi
+let players = JSON.parse(localStorage.getItem("players") || "[]");
+if(players.length === 0){
+    players.push({ username: "yusuf", gold: 1000, ammo: 500, sp: 50, banned: false });
+    players.push({ username: "ahmet", gold: 2000, ammo: 800, sp: 100, banned: false });
+    localStorage.setItem("players", JSON.stringify(players));
+}
+
+// Admin girişi
+function login() {
+    const u = document.getElementById("loginUser").value;
+    const p = document.getElementById("loginPass").value;
+
+    const admin = admins.find(a => a.username === u && a.password === p);
+    if(admin){
+        alert(`Admin girişi başarılı! Hoş geldin, ${u}`);
+        document.getElementById("adminPanel").style.display = "block";
+        listAdmins();
+    } else {
+        alert("Hatalı giriş! Bu kullanıcı admin değil veya şifre yanlış.");
+    }
+}
+
+// Listeleme
+function listAdmins() {
+    const list = document.getElementById("adminList");
+    list.innerHTML = "";
+    admins.forEach(a => {
+        const li = document.createElement("li");
+        li.textContent = a.username;
+        list.appendChild(li);
+    });
+}
+
+// Admin yetkileri
+function getTarget() {
+    const targetName = document.getElementById("targetUser").value;
+    const target = players.find(p => p.username === targetName);
+    if(!target){
+        alert("Oyuncu bulunamadı!");
+        return null;
+    }
+    return target;
+}
+
+function savePlayers() {
+    localStorage.setItem("players", JSON.stringify(players));
+}
+
+function addGold() {
+    const t = getTarget();
+    if(t){ t.gold += 1000; savePlayers(); alert(`${t.username} altın kazandı!`); }
+}
+function removeGold() {
+    const t = getTarget();
+    if(t){ t.gold = Math.max(0, t.gold - 1000); savePlayers(); alert(`${t.username} altın kaybetti!`); }
+}
+function addAmmo() {
+    const t = getTarget();
+    if(t){ t.ammo += 500; savePlayers(); alert(`${t.username} mermi kazandı!`); }
+}
+function removeAmmo() {
+    const t = getTarget();
+    if(t){ t.ammo = Math.max(0, t.ammo - 500); savePlayers(); alert(`${t.username} mermi kaybetti!`); }
+}
+function addSP() {
+    const t = getTarget();
+    if(t){ t.sp += 50; savePlayers(); alert(`${t.username} saygı puanı kazandı!`); }
+}
+function removeSP() {
+    const t = getTarget();
+    if(t){ t.sp = Math.max(0, t.sp - 50); savePlayers(); alert(`${t.username} saygı puanı kaybetti!`); }
+}
+function banUser() {
+    const t = getTarget();
+    if(t){ t.banned = true; savePlayers(); alert(`${t.username} banlandı!`); }
+}
+function unbanUser() {
+    const t = getTarget();
+    if(t){ t.banned = false; savePlayers(); alert(`${t.username} banı kaldırıldı!`); }
+}
+</script>

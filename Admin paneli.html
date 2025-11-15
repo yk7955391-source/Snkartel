@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Admin Paneli</title>
+<style>
+    body{background:#111;color:#fff;font-family:Arial;padding:20px;}
+    h1{color:#ffd700;}
+    .box{
+        background:#1d1d1d;
+        padding:15px;
+        margin-bottom:20px;
+        border-radius:10px;
+        border:1px solid #333;
+    }
+    input,button,select{
+        padding:10px;
+        width:90%;
+        margin-top:8px;
+        border-radius:8px;
+        border:none;
+    }
+    button{background:#ffd700;font-weight:bold;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<h1>🎮 ADMIN PANEL</h1>
+
+<!------------------ KULLANICI SEÇ ----------------->
+<div class="box">
+    <h2>Oyuncu Kullanıcı Adı</h2>
+    <input id="username" placeholder="oyuncu adı">
+</div>
+
+<!------------------ ALTIN ----------------->
+<div class="box">
+    <h2>Altın İşlemleri</h2>
+    <input id="goldAdd" type="number" placeholder="Eklenecek altın">
+    <button onclick="addGold()">Altın Ekle</button>
+
+    <input id="goldRemove" type="number" placeholder="Silinecek altın">
+    <button onclick="removeGold()">Altın Sil</button>
+</div>
+
+<!------------------ MERMİ ----------------->
+<div class="box">
+    <h2>Mermi İşlemleri</h2>
+    <input id="ammoAdd" type="number" placeholder="Eklenecek mermi">
+    <button onclick="addAmmo()">Mermi Ekle</button>
+
+    <input id="ammoRemove" type="number" placeholder="Silinecek mermi">
+    <button onclick="removeAmmo()">Mermi Sil</button>
+</div>
+
+<!------------------ SP ----------------->
+<div class="box">
+    <h2>Seviye Puanı (SP)</h2>
+    <input id="spAdd" type="number" placeholder="Eklenecek SP">
+    <button onclick="addSP()">SP Ekle</button>
+
+    <input id="spRemove" type="number" placeholder="Silinecek SP">
+    <button onclick="removeSP()">SP Sil</button>
+</div>
+
+<!------------------ SY ----------------->
+<div class="box">
+    <h2>Saygı Puanı (SY)</h2>
+    <input id="syAdd" type="number" placeholder="Eklenecek SY">
+    <button onclick="addSY()">SY Ekle</button>
+
+    <input id="syRemove" type="number" placeholder="Silinecek SY">
+    <button onclick="removeSY()">SY Sil</button>
+</div>
+
+<!------------------ BAN ----------------->
+<div class="box" style="border-color: #a00;">
+    <h2 style="color:#ff5555;">🚫 Banlama Sistemi</h2>
+    <button onclick="banUser()" style="background:#ff4444;">Oyuncuyu Banla</button>
+    <button onclick="unbanUser()" style="background:#44ff44;">Banı Kaldır</button>
+</div>
+
+<!------------------ SIFIRLAMA ----------------->
+<div class="box">
+    <h2>Hesabı Tamamen Sıfırla</h2>
+    <button onclick="resetUser()" style="background:#888;">Sıfırla</button>
+</div>
+
+<!------------------ LİSTE ----------------->
+<div class="box">
+    <h2>Kayıtlı Oyuncuları Gör</h2>
+    <button onclick="showUsers()">Listeyi Göster</button>
+    <pre id="userList" style="white-space:pre-wrap;margin-top:10px;"></pre>
+</div>
+
+<script>
+
+function getUsers(){
+    return JSON.parse(localStorage.getItem("users") || "[]");
+}
+
+function saveUsers(users){
+    localStorage.setItem("users", JSON.stringify(users));
+}
+
+function getUser(name){
+    let users = getUsers();
+    return users.find(u => u.username === name);
+}
+
+function updateUser(name, callback){
+    let users = getUsers();
+    let u = users.find(user => user.username === name);
+    if(!u) return alert("Oyuncu bulunamadı!");
+
+    callback(u);
+    saveUsers(users);
+}
+
+/* -------- ALTIN -------- */
+function addGold(){
+    let name = username.value;
+    let val = Number(goldAdd.value);
+    updateUser(name, u => u.gold = (u.gold||0)+val);
+    alert("Altın eklendi!");
+}
+function removeGold(){
+    let name = username.value;
+    let val = Number(goldRemove.value);
+    updateUser(name, u => u.gold = Math.max(0,(u.gold||0)-val));
+    alert("Altın silindi!");
+}
+
+/* -------- MERMİ -------- */
+function addAmmo(){
+    let name = username.value;
+    let val = Number(ammoAdd.value);
+    updateUser(name, u => u.bullets = (u.bullets||0)+val);
+    alert("Mermi eklendi!");
+}
+function removeAmmo(){
+    let name = username.value;
+    let val = Number(ammoRemove.value);
+    updateUser(name, u => u.bullets = Math.max(0,(u.bullets||0)-val));
+    alert("Mermi silindi!");
+}
+
+/* -------- SP -------- */
+function addSP(){
+    let name = username.value;
+    let val = Number(spAdd.value);
+    updateUser(name, u => u.sp = (u.sp||0)+val);
+    alert("SP eklendi!");
+}
+function removeSP(){
+    let name = username.value;
+    let val = Number(spRemove.value);
+    updateUser(name, u => u.sp = Math.max(0,(u.sp||0)-val));
+    alert("SP silindi!");

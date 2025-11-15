@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Son Kartel - Altın Sıralaması</title>
+<style>
+body {
+    background:#111;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+    padding:20px;
+}
+h1 { color:#ffd700; margin-bottom:20px; }
+.table {
+    margin:0 auto;
+    border-collapse: collapse;
+    width: 60%;
+}
+.table th, .table td {
+    border: 1px solid #fff;
+    padding: 10px;
+}
+.table th { background:#222; }
+.table td { background:#1a1a1a; }
+</style>
+</head>
+<body>
+
+<h1>🏆 Son Kartel - Altın Sıralaması</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Sıra</th>
+            <th>Oyuncu</th>
+            <th>Altın</th>
+        </tr>
+    </thead>
+    <tbody id="ranking-body">
+        <!-- Dinamik olarak JS ile doldurulacak -->
+    </tbody>
+</table>
+
+<script>
+let players = [
+    { name: "Oyuncu1", gold: 2000 },
+    { name: "Oyuncu2", gold: 1500 },
+    { name: "Oyuncu3", gold: 1200 },
+    { name: "Oyuncu4", gold: 1100 },
+    { name: "Oyuncu5", gold: 1000 },
+    { name: "Oyuncu6", gold: 900 },
+    { name: "Oyuncu7", gold: 800 },
+    { name: "Oyuncu8", gold: 700 },
+    { name: "Oyuncu9", gold: 600 },
+    { name: "Oyuncu10", gold: 500 },
+    { name: "Oyuncu11", gold: 400 } // Bu oyuncu sıralama limitini geçer
+];
+
+// Altın miktarına göre sırala ve maksimum 10 göster
+players.sort((a,b) => b.gold - a.gold);
+const topPlayers = players.slice(0, 10);
+
+const tbody = document.getElementById("ranking-body");
+
+topPlayers.forEach((p, i) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${i+1}</td>
+        <td>${p.name}</td>
+        <td>${p.gold}</td>
+    `;
+    tbody.appendChild(row);
+});
+</script>
+
+</body>
+</html>

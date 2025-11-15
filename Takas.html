@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Son Kartel - Takas Merkezi</title>
+<style>
+body { 
+    background:#111; 
+    color:white; 
+    font-family:Arial; 
+    padding:20px; 
+    text-align:center;
+}
+h1 { color:#00eaff; }
+.box { 
+    border:1px solid #00eaff; 
+    padding:15px; 
+    margin-bottom:20px; 
+    border-radius:10px; 
+}
+input, button { 
+    padding:10px; 
+    border-radius:6px; 
+    margin:5px 0; 
+    border:none; 
+}
+button { 
+    background:#00eaff; 
+    cursor:pointer; 
+    font-weight:bold; 
+}
+button:hover { background:#00c2cc; }
+.offer { 
+    border:1px solid #00eaff; 
+    padding:10px; 
+    margin-top:10px; 
+    border-radius:8px; 
+}
+</style>
+</head>
+<body>
+
+<h1>🔄 Son Kartel — Takas Merkezi</h1>
+<p>Burada oyuncular kendi aralarında Mermi, Saygı veya Para takası yapar. Sistem fiyat veya karışıklığa karışmaz.</p>
+
+<!-- Yeni Takas İlanı -->
+<div class="box">
+<h2>Yeni Takas İlanı Aç</h2>
+<label>Oyuncu Adın:</label><br>
+<input type="text" id="player"><br>
+
+<label>Vereceğin (Mermi/Saygı/Para):</label><br>
+<input type="text" id="give"><br>
+
+<label>Karşılık İstediğin (Mermi/Saygı/Para):</label><br>
+<input type="text" id="want"><br>
+
+<button onclick="createOffer()">İlanı Oluştur</button>
+</div>
+
+<!-- Açık Takas İlanları -->
+<div class="box">
+<h2>📢 Açık Takas İlanları</h2>
+<div id="offers"></div>
+</div>
+
+<script>
+let offers = [];
+
+// Yeni ilan oluştur
+function createOffer() {
+    const player = document.getElementById("player").value.trim();
+    const give = document.getElementById("give").value.trim();
+    const want = document.getElementById("want").value.trim();
+
+    if (!player || !give || !want) {
+        alert("Lütfen tüm alanları doldur!");
+        return;
+    }
+
+    offers.push({ player, give, want });
+    renderOffers();
+    alert("Takas ilanı yayınlandı!");
+}
+
+// İlanları göster
+function renderOffers() {
+    const div = document.getElementById("offers");
+    div.innerHTML = "";
+
+    offers.forEach((o, i) => {
+        div.innerHTML += `
+        <div class="offer">
+            <p><b>${o.player}</b> veriyor: <span style="color:#0ff">${o.give}</span></p>
+            <p>İstediği karşılık: <span style="color:#0ff">${o.want}</span></p>
+            <button onclick="acceptOffer(${i})">Teklifi Kabul Et</button>
+        </div>
+        `;
+    });
+}
+
+// Teklifi kabul et

@@ -1,0 +1,101 @@
+<div class="store-container">
+  <h2>🌟 Altın Mağazası</h2>
+
+  <div class="store-items">
+    <!-- 500 Altın -->
+    <div class="store-item">
+      <div class="gold-icon">💰</div>
+      <h3>500 Altın</h3>
+      <p>Fiyat: 100 TL</p>
+      <button onclick="buyWithShopier(500)">Satın Al</button>
+    </div>
+
+    <!-- 1000 Altın -->
+    <div class="store-item">
+      <div class="gold-icon">💰💰</div>
+      <h3>1000 Altın</h3>
+      <p>Fiyat: 200 TL</p>
+      <button onclick="buyWithShopier(1000)">Satın Al</button>
+    </div>
+
+    <!-- 2500 Altın -->
+    <div class="store-item">
+      <div class="gold-icon">💰💰💰</div>
+      <h3>2500 Altın</h3>
+      <p>Fiyat: 500 TL</p>
+      <button onclick="buyWithShopier(2500)">Satın Al</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.store-container {
+  width: 90%;
+  max-width: 800px;
+  margin: auto;
+  background: linear-gradient(to bottom, #1a1a1a, #111);
+  color: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px gold;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+}
+
+.store-items {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.store-item {
+  background: #222;
+  border-radius: 15px;
+  padding: 20px;
+  width: 200px;
+  margin: 10px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.store-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 25px gold;
+}
+
+.gold-icon {
+  font-size: 40px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background: gold;
+  color: #111;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+</style>
+
+<script>
+function buyWithShopier(amount) {
+  let user = localStorage.getItem("currentUser");
+  if (!user) { alert("Giriş yapmalısın!"); return; }
+
+  let shopierLink = "";
+  if (amount === 500) shopierLink = "https://shopier.com/41193833";
+  if (amount === 1000) shopierLink = "https://shopier.com/41203160";
+  if (amount === 2500) shopierLink = "https://shopier.com/41203194";
+
+  if (shopierLink === "") { alert("Geçersiz ürün!"); return; }
+  window.open(shopierLink, "_blank");
+}
+</script>

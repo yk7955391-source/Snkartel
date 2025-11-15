@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Havalimanı</title>
+    <style>
+        body {
+            background: #0e0e0e;
+            color: white;
+            font-family: Arial;
+            text-align: center;
+        }
+        h1 { margin-top: 30px; }
+        .country-box {
+            width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            background: #1a1a1a;
+        }
+        button {
+            padding: 10px 20px;
+            background: gold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: orange; }
+    </style>
+</head>
+<body>
+
+<h1>✈️ Havalimanı – Ülke Biletleri</h1>
+<p>Her ülke bileti fiyatı: <b>500.000.000$</b></p>
+
+<div id="list"></div>
+
+<script>
+    let balance = 10000000000; // Oyuncu bakiyesi (örnek)
+    const ticketPrice = 500000000;
+
+    const countries = [
+        "Amerika Birleşik Devletleri",
+        "Rusya",
+        "Birleşik Krallık",
+        "Kolombiya",
+        "Türkiye"
+    ];
+
+    function buyTicket(country) {
+        if (balance >= ticketPrice) {
+            balance -= ticketPrice;
+            alert(country + " biletini aldın! Yeni bakiye: " + balance.toLocaleString() + " $");
+        } else {
+            alert("Yetersiz bakiye! Bilet: 500M $");
+        }
+    }
+
+    let listDiv = document.getElementById("list");
+
+    countries.forEach(c => {
+        listDiv.innerHTML += `
+            <div class="country-box">
+                <h3>${c}</h3>
+                <p>Fiyat: 500.000.000 $</p>
+                <button onclick="buyTicket('${c}')">Bilet Satın Al</button>
+            </div>
+        `;
+    });
+</script>
+
+</body>
+</html>
